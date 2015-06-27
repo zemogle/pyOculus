@@ -1,7 +1,7 @@
 import sys, time, logging
 import PyIndi
 
-DEVICE_NAME = "QHY CCD QHY5-0-M-"
+DEVICE_NAME = "SX CCD SuperStar"
  
 class IndiClient(PyIndi.BaseClient):
 
@@ -68,7 +68,7 @@ class IndiClient(PyIndi.BaseClient):
 	#get current exposure time
 	exp = self.device.getNumber("CCD_EXPOSURE")
 	# set exposure time to 5 seconds
-	exp[0].value = 5
+	exp[0].value = 0.01
 	# send new exposure time to server/device
 	self.sendNewNumber(exp)
 
