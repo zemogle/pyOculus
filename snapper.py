@@ -2,8 +2,11 @@ from indiclient import IndiClient
 import time, sys
 from datetime import datetime
 import ephem as eph
+import matplotlib as plt
+from astropy.io import fits
 
-FILENAME = 'latest.fits'
+FILENAME_FITS = 'latest.fits'
+FILENAME_PNG = 'latest.png'
 NIGHT_EXP  = 180
 DAY_EXP = 0.01
 
@@ -14,17 +17,16 @@ def take_exposure(exptime=EXPTIME, filename=FILENAME):
     indiclient=IndiClient(exptime, filename)
     # set indi server localhost and port 7624
     indiclient.setServer("localhost",7624)
-    # connect to indi server
-    print("Connecting and waiting 2secs")
+    # connect to indi server pause for 2 seconds
     if (not(indiclient.connectServer())):
          print("No indiserver running on "+indiclient.getHost()+":"+str(indiclient.getPort())+" - Try to run")
-         print("  indiserver indi_simulator_telescope indi_simulator_ccd")
-         sys.exit(1)
+         return False
     time.sleep(1)
      
     # start endless loop, client works asynchron in background, loop stops after disconnect
     while indiclient.connected:
         time.sleep(1)
+    return True
 
 def set_exposure(currenttime):
     sunset, sunrise = rise_set(currenttime)
@@ -45,7 +47,21 @@ def rise_set(currenttime=None):
     sunset = datetime(*sunset_eph[0:-1])
     return (sunrise, sunset)
 
+def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
+    data = fits.getdata(fitsfile)
+    plt.imshow(data, cmap='gray', vmin=2.e3, vmax=15.e3)
+    plt.savefig(pngfile,bbox_inches='tight', dpi=150)
+    return
+
+
+
 if __name__ == '__main__':
     currenttime = datetime.utcnow()
     exp = set_exposure(currenttime)
-	take_exposure(exptime=exp)
+    datestamp = datetime.now().strftime("%Y%m%d-%H%M")
+    fitsfile = '%s.fits' % datestamp
+    pngfile = '%s.png' % datestamp
+	resp = take_exposure(exptime=exp, filename=fitsfile)
+    if resp:
+        make_image(fitsfile, pngfile)
+        print("Saved %s" % pngfile)
