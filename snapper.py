@@ -2,7 +2,7 @@ from indiclient import IndiClient
 import time, sys
 from datetime import datetime
 import ephem as eph
-import matplotlib as plt
+from PIL import Image
 from astropy.io import fits
 
 FILENAME_FITS = 'latest.fits'
@@ -49,8 +49,9 @@ def rise_set(currenttime=None):
 
 def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     data = fits.getdata(fitsfile)
-    plt.imshow(data, cmap='gray', vmin=2.e3, vmax=15.e3)
-    plt.savefig(pngfile,bbox_inches='tight', dpi=150)
+    scaled = data*255./data.max()
+    result = Image.fromarray(scaled.astype(numpy.uint8))
+    result.save(pngfile)
     return
 
 
