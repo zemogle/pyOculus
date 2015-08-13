@@ -12,7 +12,7 @@ DAY_EXP = 0.01
 
   
 
-def take_exposure(exptime=EXPTIME, filename=FILENAME):
+def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
     # instantiate the client
     indiclient=IndiClient(exptime, filename)
     # set indi server localhost and port 7624
