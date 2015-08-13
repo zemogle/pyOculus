@@ -7,7 +7,7 @@ class IndiClient(PyIndi.BaseClient):
 
     device = None
 
-    def __init__(self, exptime, filename=None, device=DEVICE_NAME):
+    def __init__(self, exptime=10.0, filename="frame.fits", device=DEVICE_NAME):
         super(IndiClient, self).__init__()
         self.logger = logging.getLogger('PyQtIndi.IndiClient')
         self.logger.info('creating an instance of PyQtIndi.IndiClient')
@@ -41,7 +41,7 @@ class IndiClient(PyIndi.BaseClient):
         # write image data to StringIO buffer
         blobfile = cStringIO.StringIO(img)
         # open a file and save buffer to disk
-        with open("frame.fit", "wb") as f:
+        with open(self.filename, "wb") as f:
             f.write(blobfile.getvalue())
         # start new exposure for timelapse images!
         # self.takeExposure()

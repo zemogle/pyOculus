@@ -1,12 +1,11 @@
 import sys, time, logging
 import PyIndi
-from indiclient import IndiClient
 
 DEVICE_NAME = "SX CCD SuperStar"
 
 if __name__ == '__main__':
 	# instantiate the client
-	indiclient=IndiClient()
+	indiclient=IndiClient(10.0,'test.fits',DEVICE_NAME)
 	# set indi server localhost and port 7624
 	indiclient.setServer("localhost",7624)
 	# connect to indi server
