@@ -4,6 +4,7 @@ from datetime import datetime
 import ephem as eph
 from PIL import Image
 from astropy.io import fits
+import numpy
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
