@@ -7,7 +7,7 @@ from astropy.io import fits
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
-NIGHT_EXP  = 180
+NIGHT_EXP  = 90
 DAY_EXP = 0.01
 
   
@@ -41,8 +41,8 @@ def rise_set(currenttime=None):
     brecon = eph.Observer()
     brecon.lat, brecon.lon = '51.924854', '-3.488342'
     brecon.date = currenttime.strftime('%Y/%m/%d %H:%M') if not currenttime else datetime.utcnow()
-    sunrise_eph = brecon.previous_rising(eph.Sun()).tuple()
-    sunset_eph = brecon.next_setting(eph.Sun()).tuple()
+    sunrise_eph = brecon.next_rising(eph.Sun()).tuple()
+    sunset_eph = brecon.previous_setting(eph.Sun()).tuple()
     sunrise = datetime(*sunrise_eph[0:-1])
     sunset = datetime(*sunset_eph[0:-1])
     return (sunrise, sunset)
@@ -64,5 +64,5 @@ if __name__ == '__main__':
     pngfile = '%s.png' % datestamp
     resp = take_exposure(exptime=exp, filename=fitsfile)
     if resp:
-        make_image(fitsfile, pngfile)
+        make_image(pngfile=pngfile)
         print("Saved %s" % pngfile)
