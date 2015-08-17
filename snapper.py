@@ -10,7 +10,7 @@ FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
 NIGHT_EXP  = 90
 DAY_EXP = 0.01
-
+DATA_DIR = '/home/pi/images/'
   
 
 def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
@@ -42,8 +42,8 @@ def rise_set(currenttime=None):
     brecon = eph.Observer()
     brecon.lat, brecon.lon = '51.924854', '-3.488342'
     brecon.date = currenttime.strftime('%Y/%m/%d %H:%M') if not currenttime else datetime.utcnow()
-    sunrise_eph = brecon.next_rising(eph.Sun()).tuple()
-    sunset_eph = brecon.previous_setting(eph.Sun()).tuple()
+    sunrise_eph = brecon.previous_rising(eph.Sun()).tuple()
+    sunset_eph = brecon.next_setting(eph.Sun()).tuple()
     sunrise = datetime(*sunrise_eph[0:-1])
     sunset = datetime(*sunset_eph[0:-1])
     return (sunrise, sunset)
@@ -61,9 +61,9 @@ if __name__ == '__main__':
     currenttime = datetime.utcnow()
     exp = set_exposure(currenttime)
     datestamp = datetime.now().strftime("%Y%m%d-%H%M")
-    fitsfile = '%s.fits' % datestamp
-    pngfile = '%s.png' % datestamp
-    resp = take_exposure(exptime=exp)
+    fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
+    pngfile = '%s%s.png' % (DATA_DIR, datestamp)
+    resp = take_exposure(exptime=exp, filename=fitsfile)
     if resp:
-        make_image(pngfile=pngfile)
+        make_image(fitsfile=fitsfile, pngfile=pngfile)
         print("Saved %s" % pngfile)

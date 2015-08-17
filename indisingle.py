@@ -1,5 +1,6 @@
 import sys, time, logging
 import PyIndi
+from indiclient import IndiClient
 
 DEVICE_NAME = "SX CCD SuperStar"
 
