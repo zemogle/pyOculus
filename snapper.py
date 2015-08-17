@@ -62,7 +62,7 @@ if __name__ == '__main__':
     datestamp = datetime.now().strftime("%Y%m%d-%H%M")
     fitsfile = '%s.fits' % datestamp
     pngfile = '%s.png' % datestamp
-    resp = take_exposure(exptime=exp, filename=fitsfile)
+    resp = take_exposure(exptime=exp)
     if resp:
         make_image(pngfile=pngfile)
         print("Saved %s" % pngfile)
