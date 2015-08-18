@@ -1,6 +1,6 @@
 from indiclient import IndiClient
 import time, sys
-from datetime import datetime
+from datetime import datetime, timedelta
 import ephem as eph
 from PIL import Image
 from astropy.io import fits
@@ -31,7 +31,7 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
 
 def set_exposure(currenttime):
     sunset, sunrise = rise_set(currenttime)
-    if sunset < currenttime and sunrise > currenttime:
+    if (sunrise-sunset) < timedelta(days=1):
         exp = NIGHT_EXP
     else:
         exp = DAY_EXP
