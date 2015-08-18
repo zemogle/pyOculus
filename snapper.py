@@ -5,6 +5,7 @@ import ephem as eph
 from PIL import Image
 from astropy.io import fits
 import numpy
+from shutil import copyfile
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
@@ -63,7 +64,9 @@ if __name__ == '__main__':
     datestamp = datetime.now().strftime("%Y%m%d-%H%M")
     fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
     pngfile = '%s%s.png' % (DATA_DIR, datestamp)
+    latestpng = '%slatest.png' % (DATA_DIR)
     resp = take_exposure(exptime=exp, filename=fitsfile)
     if resp:
         make_image(fitsfile=fitsfile, pngfile=pngfile)
+        copyfile(pngfile,latestpng)
         print("Saved %s" % pngfile)
