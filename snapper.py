@@ -31,11 +31,12 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
     return True
 
 def set_exposure(currenttime):
-    sunset, sunrise = rise_set(currenttime)
+    sunrise, sunset = rise_set(currenttime)
     if (sunrise-sunset) < timedelta(days=1):
         exp = NIGHT_EXP
     else:
         exp = DAY_EXP
+    print("Setting exposure time to %s (%s)" % (exp, sunrise-sunset))
     return exp
 
 
@@ -43,8 +44,8 @@ def rise_set(currenttime=None):
     brecon = eph.Observer()
     brecon.lat, brecon.lon = '51.924854', '-3.488342'
     brecon.date = currenttime.strftime('%Y/%m/%d %H:%M') if not currenttime else datetime.utcnow()
-    sunrise_eph = brecon.previous_rising(eph.Sun()).tuple()
-    sunset_eph = brecon.next_setting(eph.Sun()).tuple()
+    sunrise_eph = brecon.next_rising(eph.Sun()).tuple()
+    sunset_eph = brecon.previous_setting(eph.Sun()).tuple()
     sunrise = datetime(*sunrise_eph[0:-1])
     sunset = datetime(*sunset_eph[0:-1])
     return (sunrise, sunset)
