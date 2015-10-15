@@ -62,3 +62,6 @@ data/*
 *.fit
 *.fits
 *.png
+
+# Test code
+indisingle.py
