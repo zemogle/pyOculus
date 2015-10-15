@@ -23,7 +23,6 @@ The INDI server handles all the communication with the camera, so the server has
 
 This needs to be running when you do the next step, so open a new terminal (or if you are running headless, open another ssh session).
 
-`python indi_single.py`
+`python snapper.py`
 
-will save a file called `frame.fits` after taking a 1s image.
-
+will save a file called `latest.fits` after taking an image.

@@ -12,7 +12,7 @@ FILENAME_PNG = 'latest.png'
 NIGHT_EXP  = 90
 DAY_EXP = 0.01
 DATA_DIR = '/home/pi/images/'
-  
+
 
 def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
     # instantiate the client
@@ -24,7 +24,7 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
          print("No indiserver running on "+indiclient.getHost()+":"+str(indiclient.getPort())+" - Try to run")
          return False
     time.sleep(1)
-     
+
     # start endless loop, client works asynchron in background, loop stops after disconnect
     while indiclient.connected:
         time.sleep(1)
@@ -43,8 +43,8 @@ def rise_set(currenttime=None):
     brecon = eph.Observer()
     brecon.lat, brecon.lon = '51.924854', '-3.488342'
     brecon.date = currenttime.strftime('%Y/%m/%d %H:%M') if not currenttime else datetime.utcnow()
-    sunrise_eph = brecon.previous_rising(eph.Sun()).tuple()
-    sunset_eph = brecon.next_setting(eph.Sun()).tuple()
+    sunrise_eph = brecon.next_rising(eph.Sun()).tuple()
+    sunset_eph = brecon.previous_setting(eph.Sun()).tuple()
     sunrise = datetime(*sunrise_eph[0:-1])
     sunset = datetime(*sunset_eph[0:-1])
     return (sunrise, sunset)
