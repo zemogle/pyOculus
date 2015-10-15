@@ -31,11 +31,12 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
     return True
 
 def set_exposure(currenttime):
-    sunset, sunrise = rise_set(currenttime)
+    sunrise, sunset = rise_set(currenttime)
     if (sunrise-sunset) < timedelta(days=1):
         exp = NIGHT_EXP
     else:
         exp = DAY_EXP
+    print("Setting exposure time to %s (%s)" % (exp, sunrise-sunset))
     return exp
 
 
