@@ -9,8 +9,8 @@ from shutil import copyfile
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
-NIGHT_EXP  = 90
-DAY_EXP = 0.01
+NIGHT_EXP  = 120
+DAY_EXP = 0.00001
 DATA_DIR = '/home/pi/images/'
 resp = None
 
