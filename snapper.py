@@ -12,6 +12,7 @@ FILENAME_PNG = 'latest.png'
 NIGHT_EXP  = 90
 DAY_EXP = 0.01
 DATA_DIR = '/home/pi/images/'
+resp = None
 
 
 def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
@@ -66,7 +67,8 @@ if __name__ == '__main__':
     fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
     pngfile = '%s%s.png' % (DATA_DIR, datestamp)
     latestpng = '%slatest.png' % (DATA_DIR)
-    resp = take_exposure(exptime=exp, filename=fitsfile)
+    if exp == NIGHT_EXP:
+        resp = take_exposure(exptime=exp, filename=fitsfile)
     if resp:
         make_image(fitsfile=fitsfile, pngfile=pngfile)
         copyfile(pngfile,latestpng)
