@@ -53,7 +53,10 @@ def rise_set(currenttime=None):
 
 def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     data = fits.getdata(fitsfile)
-    scaled = data*255./data.max()
+    data1 = data.reshape(data.shape[0]*data.shape[1])
+    hist, edges = numpy.histogram(data1,200)
+    min_val = edges[1]
+    scaled = data*1024./(data.max() - min_val)
     result = Image.fromarray(scaled.astype(numpy.uint8))
     result.save(pngfile)
     return
