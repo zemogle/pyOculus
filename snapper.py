@@ -52,12 +52,20 @@ def rise_set(currenttime=None):
     return (sunrise, sunset)
 
 def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
+    '''
+    Function to read in the FITS file from Oculus.
+    - flatten the 2D image array to 1D and find the 99.5% value
+    - Make all values above 99.5% value white
+    - Write image array to a PNG
+    '''
     data = fits.getdata(fitsfile)
     data1 = data.reshape(data.shape[0]*data.shape[1])
-    hist, edges = numpy.histogram(data1,200)
-    min_val = edges[1]
-    scaled = data*1024./(data.max() - min_val)
-    result = Image.fromarray(scaled.astype(numpy.uint8))
+    max_val = numpy.percentile(data1,99.5)
+    scaled = data*256./max_val
+    new_scaled = ma.masked_greater(scaled, 255.)
+    new_scaled.fill_value=255.
+    img_data = new_scaled.filled()
+    result = Image.fromarray(img_data.astype(numpy.uint8))
     result.save(pngfile)
     return
 
