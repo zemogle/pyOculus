@@ -62,7 +62,7 @@ def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     data1 = data.reshape(data.shape[0]*data.shape[1])
     max_val = numpy.percentile(data1,99.5)
     scaled = data*256./max_val
-    new_scaled = ma.masked_greater(scaled, 255.)
+    new_scaled = numpy.ma.masked_greater(scaled, 255.)
     new_scaled.fill_value=255.
     img_data = new_scaled.filled()
     result = Image.fromarray(img_data.astype(numpy.uint8))
