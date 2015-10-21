@@ -47,8 +47,8 @@ def rise_set(currenttime=None):
     brecon.date = currenttime.strftime('%Y/%m/%d %H:%M') if not currenttime else datetime.utcnow()
     sunrise_eph = brecon.next_rising(eph.Sun()).tuple()
     sunset_eph = brecon.previous_setting(eph.Sun()).tuple()
-    sunrise = datetime(*sunrise_eph[0:-1])
-    sunset = datetime(*sunset_eph[0:-1])
+    sunrise = datetime(*sunrise_eph[0:-1])-timedelta(seconds=3600)
+    sunset = datetime(*sunset_eph[0:-1])+timedelta(seconds=3600)
     return (sunrise, sunset)
 
 def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
