@@ -35,6 +35,12 @@ def set_exposure(currenttime):
     sunrise, sunset = rise_set(currenttime)
     if (sunrise-sunset) < timedelta(days=1):
         exp = NIGHT_EXP
+        if (sunrise - timedelta(seconds=5400)) < datetime.utcnow():
+            exp = NIGHT_EXP/2.
+        if (sunrise - timedelta(seconds=1800)) < datetime.utcnow():
+            exp = NIGHT_EXP/10.
+        if (sunrise - timedelta(seconds=600)) < datetime.utcnow():
+            exp = DAY_EXP
     else:
         exp = DAY_EXP
     print("Setting exposure time to %s (%s)" % (exp, sunrise-sunset))
@@ -47,20 +53,20 @@ def rise_set(currenttime=None):
     brecon.date = currenttime.strftime('%Y/%m/%d %H:%M') if not currenttime else datetime.utcnow()
     sunrise_eph = brecon.next_rising(eph.Sun()).tuple()
     sunset_eph = brecon.previous_setting(eph.Sun()).tuple()
-    sunrise = datetime(*sunrise_eph[0:-1])-timedelta(seconds=3600)
-    sunset = datetime(*sunset_eph[0:-1])+timedelta(seconds=3600)
+    sunrise = datetime(*sunrise_eph[0:-1])
+    sunset = datetime(*sunset_eph[0:-1])
     return (sunrise, sunset)
 
 def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     '''
     Function to read in the FITS file from Oculus.
-    - flatten the 2D image array to 1D and find the 99.5% value
+    - find the 99.5% value
     - Make all values above 99.5% value white
     - Write image array to a PNG
     '''
     data = fits.getdata(fitsfile)
-    data1 = data.reshape(data.shape[0]*data.shape[1])
-    max_val = numpy.percentile(data1,99.5)
+    #data1 = data.reshape(data.shape[0]*data.shape[1])
+    max_val = numpy.percentile(data,99.5)
     scaled = data*256./max_val
     new_scaled = numpy.ma.masked_greater(scaled, 255.)
     new_scaled.fill_value=255.
