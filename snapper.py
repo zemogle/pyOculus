@@ -6,6 +6,8 @@ from PIL import Image, ImageFont, ImageDraw
 from astropy.io import fits
 import numpy
 from shutil import copyfile
+from email import utils
+import time
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
@@ -79,18 +81,31 @@ def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     result.save(pngfile)
     return
 
+def make_json(now=datetime.now()):
+    nowtuple = now.timetuple()
+    nowtimestamp = time.mktime(nowtuple)
+    latestdata = {'time' : utils.formatdate(nowtimestamp)}
+    latestjson = json.dumps(latestdata)
+    filename = '%slatest.json' % (DATA_DIR)
+    f = open(filename,'wb')
+    f.write(latestjson)
+    f.close()
+    return
+
 
 
 if __name__ == '__main__':
     currenttime = datetime.utcnow()
     exp = set_exposure(currenttime)
-    datestamp = datetime.now().strftime("%Y%m%d-%H%M")
+    now = datetime.now()
+    datestamp = now.strftime("%Y%m%d-%H%M")
     fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
     pngfile = '%s%s.png' % (DATA_DIR, datestamp)
     latestpng = '%slatest.png' % (DATA_DIR)
     if exp == NIGHT_EXP:
         resp = take_exposure(exptime=exp, filename=fitsfile)
-    if resp:
-        make_image(fitsfile=fitsfile, pngfile=pngfile)
-        copyfile(pngfile,latestpng)
-        print("Saved %s" % pngfile)
+        if resp:
+            make_image(fitsfile=fitsfile, pngfile=pngfile)
+            copyfile(pngfile,latestpng)
+            make_json(now)
+            print("Saved %s" % pngfile)
