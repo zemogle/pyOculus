@@ -8,6 +8,7 @@ import numpy
 from shutil import copyfile
 from email import utils
 import time
+import json
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
