@@ -74,10 +74,10 @@ def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     new_scaled.fill_value=255.
     img_data = new_scaled.filled()
     result = Image.fromarray(img_data.astype(numpy.uint8))
-    font = ImageFont.truetype("sans-serif.ttf", 12)
-    textstamp = '%s' % datetime.now().strftime("%Y-%m-%d %H:%M")
+    font = ImageFont.truetype("FreeSans.ttf", 24)
+    textstamp = 'Brecon Beacons All Sky - %s' % datetime.now().strftime("%Y-%m-%d %H:%M")
     draw = ImageDraw.Draw(result)
-    draw.text((0, 0),textstamp,(255,255,255),font=font)
+    draw.text((10, 10), textstamp, font=font, fill=255)
     result.save(pngfile)
     return
 
