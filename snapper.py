@@ -6,7 +6,6 @@ from PIL import Image, ImageFont, ImageDraw
 from astropy.io import fits
 import numpy
 from shutil import copyfile
-from email import utils
 import time
 import json
 
@@ -83,9 +82,8 @@ def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     return
 
 def make_json(now=datetime.now()):
-    nowtuple = now.timetuple()
-    nowtimestamp = time.mktime(nowtuple)
-    latestdata = {'time' : utils.formatdate(nowtimestamp)}
+    nowtimestamp = datetime.strftime(now,"%a, %d %b %Y %H:%m:%S GMT+0000")
+    latestdata = {'time' : nowtimestamp}
     latestjson = json.dumps(latestdata)
     filename = '%slatest.json' % (DATA_DIR)
     f = open(filename,'wb')
