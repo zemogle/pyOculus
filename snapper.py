@@ -82,7 +82,7 @@ def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     return
 
 def make_json(now=datetime.now()):
-    nowtimestamp = datetime.strftime(now,"%a, %d %b %Y %H:%m:%S GMT+0000")
+    nowtimestamp = datetime.strftime(now,"%a, %d %b %Y %H:%M:%S GMT+0000")
     latestdata = {'time' : nowtimestamp}
     latestjson = json.dumps(latestdata)
     filename = '%slatest.json' % (DATA_DIR)
