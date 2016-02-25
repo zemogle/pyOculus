@@ -17,7 +17,7 @@ cd libindipython
 You will probably also need to replace the file `cmake_modules/findINDI.cmake` with the one from [this INDI issue](https://sourceforge.net/p/pyindi-client/tickets/2/).
 
 ```bash
-cmake ../pyindi-client/swig-indi/swig-indi-python
+cmake -D PYTHON_LIBRARY=/usr/lib/arm-linux-gnueabihf/libpython2.7.so -D PYTHON_INCLUDE_DIR=/usr/include/python2.7/ ../pyindi-client/swig-indi/swig-indi-python
 make
 sudo make install
 ```
