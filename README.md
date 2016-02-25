@@ -12,6 +12,11 @@ Python set up for Oculus allsky camera on Raspberry Pi. The code is currently ru
 git clone https://github.com/zemogle/pyindi-client
 mkdir libindipython
 cd libindipython
+```
+
+You will probably also need to replace the file `cmake_modules/findINDI.cmake` with the one from [this INDI issue](https://sourceforge.net/p/pyindi-client/tickets/2/).
+
+```bash
 cmake ../pyindi-client/swig-indi/swig-indi-python
 make
 sudo make install
