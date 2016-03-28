@@ -34,3 +34,9 @@ This needs to be running when you do the next step, so open a new terminal (or i
 `python snapper.py`
 
 will save a file called `latest.fits` after taking an image.
+
+## Testing Setup
+
+If you are in doubt of whether the camera is connected and working, you can run the following test script (assuming the INDi server is running):
+
+`python pyindi-client/swig-indi/swig-indi-python/test-indiclient.py`

@@ -7,3 +7,6 @@ convert -quality 90% -resize 75% /home/pi/images/latest.png /home/pi/images/late
 
 # Next make a list of all .png files created in the last 12 hours
 #find . -type f -name '*.png' -cmin -720
+
+# Make a movie out of them
+#ffmpeg -f image2 -pattern_type glob -i '*.png' -pix_fmt yuv420p -vcodec h264 latest_allsky.mpv
