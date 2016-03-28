@@ -106,4 +106,6 @@ if __name__ == '__main__':
             make_image(fitsfile=fitsfile, pngfile=pngfile)
             copyfile(pngfile,latestpng)
             make_json(now)
-            print("Saved %s" % pngfile)
+            print("Saved %s - %s" % (pngfile, datetime.isoformat()))
+    else:
+        print("Currently day %s" % datetime.isoformat())
