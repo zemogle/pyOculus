@@ -9,6 +9,6 @@ convert -quality 90% -resize 75% /home/pi/images/latest.png /home/pi/images/late
 find /home/pi/images/20*.png -type f -cmin -720 -printf "file '%f'\n" > /home/pi/images/image_files.txt
 
 # Make a movie out of them
-ffmpeg -f concat -i /home/pi/images/image_files.txt  -pix_fmt yuv420p -vcodec h264 /home/pi/images/latest.mov -y
+cd /home/pi/images/ ;ffmpeg -f concat -i /home/pi/images/image_files.txt  -pix_fmt yuv420p -vcodec h264 /home/pi/images/latest.mov -y
 /usr/local/bin/s3cmd -c /home/pi/.s3cfg --no-progress sync images/*.mov s3://www.zemogle.uk/allsky/
 mv /home/pi/images/latest.mov /home/pi/images/latest_$(date +%F).mov
