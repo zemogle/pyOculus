@@ -96,7 +96,7 @@ def make_json(now=datetime.now()):
 if __name__ == '__main__':
     currenttime = datetime.utcnow()
     exp = set_exposure(currenttime)
-    now = datetime.now()
+    now = datetime.utcnow()
     datestamp = now.strftime("%Y%m%d-%H%M")
     fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
     pngfile = '%s%s.png' % (DATA_DIR, datestamp)
