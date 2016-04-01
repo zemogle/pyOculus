@@ -1,6 +1,7 @@
 from indiclient import IndiClient
 import time, sys
 from datetime import datetime, timedelta
+import ephem as eph
 from PIL import Image, ImageFont, ImageDraw
 from astropy.io import fits
 from astropy.coordinates import EarthLocation
