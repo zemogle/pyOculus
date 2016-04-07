@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from PIL import Image, ImageFont, ImageDraw
 from astropy.io import fits
 from astropy.coordinates import EarthLocation
+from astropy.time import Time
 import astropy.units as u
 import numpy
 from shutil import copyfile
@@ -41,24 +42,26 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
 def set_exposure(brecon, currenttime):
     sunrise, sunset = rise_set(brecon, currenttime)
     exp = NIGHT_EXP
-    if (sunrise - timedelta(seconds=5400)) < datetime.utcnow():
-        exp = NIGHT_EXP/2.
-    if (sunrise - timedelta(seconds=1800)) < datetime.utcnow():
-        exp = NIGHT_EXP/10.
-    if (sunrise - timedelta(seconds=600)) < datetime.utcnow():
+    print(sunrise, sunset, currenttime)
+    if abs(sunrise - currenttime ) < timedelta(seconds=600) or abs(currenttime -sunset) < timedelta(seconds=600):
         exp = DAY_EXP
+    elif abs(sunrise - currenttime) < timedelta(seconds=1800) or abs(currenttime -sunset) < timedelta(seconds=1800):
+        exp = NIGHT_EXP/10.
+    elif abs(sunrise - currenttime) < timedelta(seconds=5400) or (abs(currenttime -sunset) < timedelta(seconds=5400)):
+        exp = NIGHT_EXP/2.
     print("Setting exposure time to %s (%s)" % (exp, sunrise-sunset))
     return exp
 
 def setup():
-    location = EarthLocation.from_geodetic(51.924854*u.deg, -3.488342*u.deg, 100*u.m)
+    location = EarthLocation.from_geodetic(-3.48902*u.deg, 51.9249*u.deg, 300*u.m)
     brecon = Observer(location=location, name="Brecon", timezone="UTC")
     return brecon
 
-def rise_set(brecon, time):
+def rise_set(brecon, currenttime):
+    time = Time(currenttime)
     sunset_tonight = brecon.sun_set_time(time, which='nearest')
     sunrise_tonight = brecon.sun_rise_time(time, which='nearest')
-    return (sunrise_tonight, sunset_tonight)
+    return (sunrise_tonight.datetime, sunset_tonight.datetime)
 
 
 def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
