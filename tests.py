@@ -1,9 +1,12 @@
 import pytest
-import mock
-from snapper import rise_set, set_exposure, set_up
+from mock import patch
+from snapper import rise_set, set_exposure, setup
 from datetime import datetime
 
 class TestCalculations:
+
+    def setUp(self):
+        
 
     def test_sunset(self):
         now = datetime(2016,4,6,0,10,0)

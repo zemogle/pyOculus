@@ -1,4 +1,7 @@
-from indiclient import IndiClient
+try:
+    from indiclient import IndiClient
+except:
+    print("INDiClient not installed")
 import time, sys
 from datetime import datetime, timedelta
 from PIL import Image, ImageFont, ImageDraw
@@ -35,7 +38,7 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
         time.sleep(1)
     return True
 
-def set_exposure(currenttime):
+def set_exposure(brecon, currenttime):
     sunrise, sunset = rise_set(brecon, currenttime)
     exp = NIGHT_EXP
     if (sunrise - timedelta(seconds=5400)) < datetime.utcnow():
