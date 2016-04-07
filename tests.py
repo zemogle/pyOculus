@@ -1,5 +1,5 @@
 import pytest
-
+import mock
 from snapper import rise_set, set_exposure, set_up
 from datetime import datetime
 
