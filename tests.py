@@ -5,14 +5,12 @@ from datetime import datetime
 
 class TestCalculations:
 
-    def setUp(self):
-        
-
-    def test_sunset(self):
+    def test_sunset_sunrise(self):
+        brecon = setup()
         now = datetime(2016,4,6,0,10,0)
         sunset = datetime(2016,4,6,18,56)
         sunrise = datetime(2016,4,6,5,2)
-        calc_sunset, calc_sunrise = rise_set(now)
+        calc_sunset, calc_sunrise = rise_set(brecon, now)
         assert sunset == calc_sunset
         assert sunrise == calc_sunrise
 
