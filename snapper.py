@@ -47,7 +47,7 @@ def set_exposure(currenttime):
     print("Setting exposure time to %s (%s)" % (exp, sunrise-sunset))
     return exp
 
-def set_up():
+def setup():
     location = EarthLocation.from_geodetic(51.924854*u.deg, -3.488342*u.deg, 100*u.m)
     brecon = Observer(location=location, name="Brecon", timezone="UTC")
     return brecon
