@@ -1,9 +1,18 @@
-from indiclient import IndiClient
+try:
+    from indiclient import IndiClient
+except:
+    print("INDiClient not installed")
 import time, sys
 from datetime import datetime, timedelta
 import ephem as eph
 from PIL import Image, ImageFont, ImageDraw
 from astropy.io import fits
+<<<<<<< HEAD
+=======
+from astropy.coordinates import EarthLocation
+from astropy.time import Time
+import astropy.units as u
+>>>>>>> feature/astroplan
 import numpy
 from shutil import copyfile
 import time
@@ -33,6 +42,7 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
         time.sleep(1)
     return True
 
+<<<<<<< HEAD
 def set_exposure(currenttime):
     sunrise, sunset = rise_set(currenttime)
     if (sunrise-sunset) < timedelta(days=1):
@@ -44,10 +54,34 @@ def set_exposure(currenttime):
         if (sunrise - timedelta(seconds=600)) < datetime.utcnow():
             exp = DAY_EXP
     else:
+=======
+def set_exposure(brecon, currenttime):
+    sunrise, sunset = rise_set(brecon, currenttime)
+    exp = NIGHT_EXP
+    print(sunrise, sunset, currenttime)
+    if abs(sunrise - currenttime ) < timedelta(seconds=600) or abs(currenttime -sunset) < timedelta(seconds=600):
+>>>>>>> feature/astroplan
         exp = DAY_EXP
+    elif abs(sunrise - currenttime) < timedelta(seconds=1800) or abs(currenttime -sunset) < timedelta(seconds=1800):
+        exp = NIGHT_EXP/10.
+    elif abs(sunrise - currenttime) < timedelta(seconds=5400) or (abs(currenttime -sunset) < timedelta(seconds=5400)):
+        exp = NIGHT_EXP/2.
     print("Setting exposure time to %s (%s)" % (exp, sunrise-sunset))
     return exp
 
+<<<<<<< HEAD
+=======
+def setup():
+    location = EarthLocation.from_geodetic(-3.48902*u.deg, 51.9249*u.deg, 300*u.m)
+    brecon = Observer(location=location, name="Brecon", timezone="UTC")
+    return brecon
+
+def rise_set(brecon, currenttime):
+    time = Time(currenttime)
+    sunset_tonight = brecon.sun_set_time(time, which='nearest')
+    sunrise_tonight = brecon.sun_rise_time(time, which='nearest')
+    return (sunrise_tonight.datetime, sunset_tonight.datetime)
+>>>>>>> feature/astroplan
 
 def rise_set(currenttime=None):
     brecon = eph.Observer()
