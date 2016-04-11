@@ -13,6 +13,7 @@ import numpy
 from shutil import copyfile
 import time
 import json
+from astroplan import Observer
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
@@ -38,7 +39,6 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
         time.sleep(1)
     return True
 
-
 def set_exposure(brecon, currenttime):
     sunrise, sunset = rise_set(brecon, currenttime)
     exp = NIGHT_EXP
@@ -56,6 +56,12 @@ def setup():
     location = EarthLocation.from_geodetic(-3.48902*u.deg, 51.9249*u.deg, 300*u.m)
     brecon = Observer(location=location, name="Brecon", timezone="UTC")
     return brecon
+
+def rise_set(brecon, currenttime):
+    time = Time(currenttime)
+    sunset_tonight = brecon.sun_set_time(time, which='nearest')
+    sunrise_tonight = brecon.sun_rise_time(time, which='nearest')
+    return (sunrise_tonight.datetime, sunset_tonight.datetime)
 
 
 def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
@@ -93,14 +99,15 @@ def make_json(now=datetime.now()):
 
 
 if __name__ == '__main__':
+    brecon = setup()
     currenttime = datetime.utcnow()
-    exp = set_exposure(currenttime)
-    now = datetime.utcnow()
-    datestamp = now.strftime("%Y%m%d-%H%M")
-    fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
-    pngfile = '%s%s.png' % (DATA_DIR, datestamp)
-    latestpng = '%slatest.png' % (DATA_DIR)
-    if exp == NIGHT_EXP:
+    if brecon.is_night(currenttime):
+        exp = set_exposure(brecon, currenttime)
+        now = datetime.utcnow()
+        datestamp = now.strftime("%Y%m%d-%H%M")
+        fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
+        pngfile = '%s%s.png' % (DATA_DIR, datestamp)
+        latestpng = '%slatest.png' % (DATA_DIR)
         resp = take_exposure(exptime=exp, filename=fitsfile)
         if resp:
             make_image(fitsfile=fitsfile, pngfile=pngfile)
