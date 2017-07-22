@@ -9,7 +9,7 @@ from astropy.io import fits
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
 import astropy.units as u
-import numpy
+from numpy import ma, percentile, uint8
 from shutil import copyfile
 import time
 import json
@@ -73,12 +73,12 @@ def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     '''
     data = fits.getdata(fitsfile)
     #data1 = data.reshape(data.shape[0]*data.shape[1])
-    max_val = numpy.percentile(data,99.5)
+    max_val = percentile(data,99.5)
     scaled = data*256./max_val
-    new_scaled = numpy.ma.masked_greater(scaled, 255.)
+    new_scaled = ma.masked_greater(scaled, 255.)
     new_scaled.fill_value=255.
     img_data = new_scaled.filled()
-    result = Image.fromarray(img_data.astype(numpy.uint8))
+    result = Image.fromarray(img_data.astype(uint8))
     font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 24)
     textstamp = 'Brecon Beacons All Sky - %s' % datetime.now().strftime("%Y-%m-%d %H:%M")
     draw = ImageDraw.Draw(result)
