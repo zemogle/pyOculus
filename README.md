@@ -7,14 +7,10 @@ Python set up for Oculus allsky camera on Raspberry Pi. The code is currently ru
 - Install Swig via `sudo apt-get install swig` you may need to do `sudo apt-get install -f` to get the dependencies
 - You may need to install `cmake` with `sudo apt-get install cmake` before the next step
 - You may also need to install python dev using `sudo apt-get install python-dev`
-- Install the [PyINDI client](https://github.com/zemogle/pyindi-client) by doing
+- I recommend doing this inside a `virtualenv` or a `conda` environment, to prevent funny stuff with permissions.
+- Install the [PyINDI client] by doing
 ```bash
-git clone https://github.com/zemogle/pyindi-client
-mkdir libindipython
-cd libindipython
-cmake -D PYTHON_LIBRARY=/usr/lib/arm-linux-gnueabihf/libpython2.7.so -D PYTHON_INCLUDE_DIR=/usr/include/python2.7/ ../pyindi-client/swig-indi/swig-indi-python
-make
-sudo make install
+pip3 install pyindi-client
 ```
 
 You should already have `python` and `git` if you are using Raspbian.
