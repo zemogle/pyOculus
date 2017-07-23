@@ -2,7 +2,7 @@ import sys, time, logging
 import PyIndi
 
 DEVICE_NAME = "SX CCD SuperStar"
- 
+
 class IndiClient(PyIndi.BaseClient):
 
     device = None
@@ -34,7 +34,7 @@ class IndiClient(PyIndi.BaseClient):
         #self.logger.info("remove property "+ p.getName() + " for device "+ p.getDeviceName())
         pass
     def newBLOB(self, bp):
-        self.logger.info("new BLOB "+ bp.name.decode())
+        self.logger.info("new BLOB "+ bp.name)
         # get image data
         img = bp.getblobdata()
         import cStringIO
@@ -48,13 +48,13 @@ class IndiClient(PyIndi.BaseClient):
         # disconnect from server
         self.disconnectServer()
     def newSwitch(self, svp):
-        self.logger.info ("new Switch "+ svp.name.decode() + " for device "+ svp.device.decode())
+        self.logger.info ("new Switch "+ svp.name + " for device "+ svp.device)
     def newNumber(self, nvp):
-        self.logger.info("new Number "+ nvp.name.decode() + " for device "+ nvp.device.decode())
+        self.logger.info("new Number "+ nvp.name + " for device "+ nvp.device)
     def newText(self, tvp):
-        self.logger.info("new Text "+ tvp.name.decode() + " for device "+ tvp.device.decode())
+        self.logger.info("new Text "+ tvp.name + " for device "+ tvp.device)
     def newLight(self, lvp):
-        self.logger.info("new Light "+ lvp.name.decode() + " for device "+ lvp.device.decode())
+        self.logger.info("new Light "+ lvp.name + " for device "+ lvp.device)
     def newMessage(self, d, m):
         #self.logger.info("new Message "+ d.messageQueue(m).decode())
         pass
@@ -75,4 +75,3 @@ class IndiClient(PyIndi.BaseClient):
         self.sendNewNumber(exp)
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
-
