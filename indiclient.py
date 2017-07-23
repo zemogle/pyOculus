@@ -37,14 +37,12 @@ class IndiClient(PyIndi.BaseClient):
         self.logger.info("new BLOB "+ bp.name)
         # get image data
         img = bp.getblobdata()
-        from io import StringIO
         # write image data to StringIO buffer
-        blobfile = StringIO(img)
+        blobfile = io.BytesIO(img)
         # open a file and save buffer to disk
         with open(self.filename, "wb") as f:
             f.write(blobfile.getvalue())
         # start new exposure for timelapse images!
-        # self.takeExposure()
         # disconnect from server
         self.disconnectServer()
     def newSwitch(self, svp):
