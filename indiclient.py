@@ -1,4 +1,4 @@
-import sys, time, logging
+import sys, time, logging, io
 import PyIndi
 
 DEVICE_NAME = "SX CCD SuperStar"
