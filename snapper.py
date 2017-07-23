@@ -31,7 +31,7 @@ def take_exposure(exptime=DAY_EXP, filename=FILENAME_FITS):
     indiclient=IndiClient(exptime, filename)
     # set indi server localhost and port 7624
     indiclient.setServer("localhost",7624)
-    # connect to indi server pause for 2 seconds
+    # connect to indi server pause for 1 second
     if (not(indiclient.connectServer())):
          print("No indiserver running on "+indiclient.getHost()+":"+str(indiclient.getPort())+" - Try to run")
          return False
@@ -123,7 +123,7 @@ def runner(test):
         else:
             print("Currently day - %s" % datetime.utcnow().isoformat())
     else:
-        resp = take_exposure()
+        resp = take_exposure(exptime=0.1)
         if resp:
             make_image()
     return
