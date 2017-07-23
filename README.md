@@ -5,13 +5,13 @@ Python set up for Oculus allsky camera on Raspberry Pi. The code is currently ru
 - A Raspberry Pi
 - Need to install [INDI server](http://indilib.org/download/category/6-raspberry-pi.html) for Raspberry Pi.
 - Install Swig via `sudo apt-get install swig` you may need to do `sudo apt-get install -f` to get the dependencies
-- You may need to install `cmake` with `sudo apt-get install cmake` before the next step
 - You may also need to install python dev using `sudo apt-get install python-dev`
 - I recommend doing this inside a `virtualenv` or a `conda` environment, to prevent funny stuff with permissions.
 - Install the [PyINDI client] by doing
 ```bash
 pip3 install pyindi-client
 ```
+- Note: This code now uses Python 3. If you need a code using Python 2, [use the V1.0 release](https://github.com/zemogle/pyOculus/archive/v1.0.zip).
 
 You should already have `python` and `git` if you are using Raspbian.
 
@@ -22,7 +22,7 @@ The INDI server handles all the communication with the camera, so the server has
 
 This needs to be running when you do the next step, so open a new terminal (or if you are running headless, open another ssh session).
 
-`python snapper.py`
+`python3 snapper.py --test`
 
 will save a file called `latest.fits` after taking an image.
 

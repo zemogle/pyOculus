@@ -1,19 +1,22 @@
-try:
-    from indiclient import IndiClient
-except:
-    print("INDiClient not installed")
+
 import time, sys
 from datetime import datetime, timedelta
+from shutil import copyfile
+import json
+
 from PIL import Image, ImageFont, ImageDraw
 from astropy.io import fits
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
 import astropy.units as u
 from numpy import ma, percentile, uint8
-from shutil import copyfile
-import time
-import json
 from astroplan import Observer
+import click
+
+try:
+    from indiclient import IndiClient
+except:
+    print("INDiClient not installed")
 
 FILENAME_FITS = 'latest.fits'
 FILENAME_PNG = 'latest.png'
@@ -79,7 +82,7 @@ def make_image(fitsfile=FILENAME_FITS, pngfile=FILENAME_PNG):
     new_scaled.fill_value=255.
     img_data = new_scaled.filled()
     result = Image.fromarray(img_data.astype(uint8))
-    font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 24)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 24)
     textstamp = 'Brecon Beacons All Sky - %s' % datetime.now().strftime("%Y-%m-%d %H:%M")
     draw = ImageDraw.Draw(result)
     draw.text((10, 10), textstamp, font=font, fill=255)
@@ -96,25 +99,34 @@ def make_json(now=datetime.now()):
     f.close()
     return
 
-
+@click.command()
+@click.option('--test', is_flag=True)
+def runner(test):
+    if not test:
+        brecon = setup()
+        currenttime = datetime.utcnow()
+        if brecon.is_night(currenttime):
+            exp = set_exposure(brecon, currenttime)
+            now = datetime.utcnow()
+            datestamp = now.strftime("%Y%m%d-%H%M")
+            fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
+            pngfile = '%s%s.png' % (DATA_DIR, datestamp)
+            latestpng = '%slatest.png' % (DATA_DIR)
+            resp = take_exposure(exptime=exp, filename=fitsfile)
+            if resp:
+                make_image(fitsfile=fitsfile, pngfile=pngfile)
+                copyfile(pngfile,latestpng)
+                make_json(now)
+                print("Saved %s - %s" % (pngfile, datetime.utcnow().isoformat()))
+            else:
+                print("Error!")
+        else:
+            print("Currently day - %s" % datetime.utcnow().isoformat())
+    else:
+        resp = take_exposure()
+        if resp:
+            make_image()
+    return
 
 if __name__ == '__main__':
-    brecon = setup()
-    currenttime = datetime.utcnow()
-    if brecon.is_night(currenttime):
-        exp = set_exposure(brecon, currenttime)
-        now = datetime.utcnow()
-        datestamp = now.strftime("%Y%m%d-%H%M")
-        fitsfile = '%s%s' % (DATA_DIR, FILENAME_FITS)
-        pngfile = '%s%s.png' % (DATA_DIR, datestamp)
-        latestpng = '%slatest.png' % (DATA_DIR)
-        resp = take_exposure(exptime=exp, filename=fitsfile)
-        if resp:
-            make_image(fitsfile=fitsfile, pngfile=pngfile)
-            copyfile(pngfile,latestpng)
-            make_json(now)
-            print("Saved %s - %s" % (pngfile, datetime.utcnow().isoformat()))
-        else:
-            print("Error!")
-    else:
-        print("Currently day - %s" % datetime.utcnow().isoformat())
+    runner()
