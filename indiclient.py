@@ -37,9 +37,9 @@ class IndiClient(PyIndi.BaseClient):
         self.logger.info("new BLOB "+ bp.name)
         # get image data
         img = bp.getblobdata()
-        import cStringIO
+        from io import StringIO
         # write image data to StringIO buffer
-        blobfile = cStringIO.StringIO(img)
+        blobfile = StringIO(img)
         # open a file and save buffer to disk
         with open(self.filename, "wb") as f:
             f.write(blobfile.getvalue())
