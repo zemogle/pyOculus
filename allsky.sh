@@ -1,7 +1,6 @@
 #!/bin/bash
 
-source /home/pi/env/allsky/bin/activate
-python /home/pi/pyOculus/snapper.py
+/home/pi/allsky/bin/python /home/pi/pyOculus/snapper.py
 convert -quality 90% -resize 75% /home/pi/images/latest.png /home/pi/images/latest.jpg
 /usr/local/bin/s3cmd -c /home/pi/.s3cfg --no-progress sync images/*.jpg s3://www.zemogle.uk/allsky/
 /usr/local/bin/s3cmd -c /home/pi/.s3cfg --no-progress sync images/*.json s3://www.zemogle.uk/allsky/
