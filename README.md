@@ -19,15 +19,15 @@ You should already have `python` and `git` if you are using Raspbian.
 [OPTIONAL INSTALLS]
 - I use ImageMagick (for JPEG compression) and FFMPEG for making the video of the timelapse
 You will have to add the following to your `/etc/apt/sources.list` to get ffmpeg
-'''bash
+```bash
 deb http://ftp.uk.debian.org/debian jessie-backports main
-'''
+```
 Then running following should install ffmpeg and ImageMagick fine.
-'''bash
+```bash
 sudo apt-get update
 sudo apt-get install ffmpeg
 sudo apt-get install imagemagick
-'''
+```
 
 
 ## Instructions
